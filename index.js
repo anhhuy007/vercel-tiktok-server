@@ -8,10 +8,9 @@ app.get('/api/hello', (req, res) => {
     res.send('Hello, World!');
 });
 
-app.get('/api/books', (req, res) => {
-    // This is where we will retrieve books from the database
-    
-});
+const bookRouter = require('book_router')
+
+app.use("/api/books", bookRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
