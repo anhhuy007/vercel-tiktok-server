@@ -1,14 +1,14 @@
-import pg from 'pg';
-
-const { Pool } = pg;
+const { Pool } = require('pg')
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
 })
 
 pool.connect((err) => {
-    if (err) throw err;
-    console.log("Connected to the database!")
+    if (err) 
+        console.log("Error connecting to the database!", err)
+    else
+        console.log("Connected to the database!")
 })
 
 module.exports = pool;
