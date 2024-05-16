@@ -23,11 +23,11 @@ const bookController = {
     },
     create: async(req, res) => {
         try {
-            const { name, price } = req.body
+            const { title, price } = req.body
 
-            const sql = 'INSERT INTO books(name, price) VALUES($1, $2) RETURNING *'
+            const sql = 'INSERT INTO books(title, price) VALUES($1, $2) RETURNING *'
 
-            const { rows } = await postgre.query(sql, [name, price])
+            const { rows } = await postgre.query(sql, [title, price])
 
             res.json({msg: "OK", data: rows[0]})
 
@@ -37,11 +37,11 @@ const bookController = {
     },
     updateById: async(req, res) => {
         try {
-            const { name, price } = req.body
+            const { title, price } = req.body
 
-            const sql = 'UPDATE books set name = $1, price = $2 where book_id = $3 RETURNING *'
+            const sql = 'UPDATE books set title = $1, price = $2 where book_id = $3 RETURNING *'
 
-            const { rows } = await postgre.query(sql, [name, price, req.params.id])
+            const { rows } = await postgre.query(sql, [title, price, req.params.id])
 
             res.json({msg: "OK", data: rows[0]})
 

@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 
-const bookController = require('../book_controller')
+const bookController = require('book_controller')
 
 router.get("/", bookController.getAll)
 router.get("/:id", bookController.getById)
