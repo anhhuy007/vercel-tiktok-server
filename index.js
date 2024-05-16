@@ -5,7 +5,7 @@ require('dotenv').config()
 
 app.use(express.json())
 
-const bookRouter = require('./routes/book.router')
+const bookRouter = require('./book_router')
 
 app.use("/api/v1/books", bookRouter)
 
