@@ -22,7 +22,6 @@ const bookController = {
         }
     },
     create: async(req, res) => {
-        console.log("Create new book");                    
         try {
             const { title, price } = req.body
 
@@ -33,6 +32,7 @@ const bookController = {
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
+            console.log("Something went wrong", error)
             res.json({msg: error.msg})
         }
     },
