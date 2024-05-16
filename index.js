@@ -1,17 +1,12 @@
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000;
+const express = require("express")
+const app = express()
 
-require('dotenv').config();
-app.use(express.json());
-app.get('/api/hello', (req, res) => {
-    res.send('Hello, World!');
-});
+require('dotenv').config()
 
-const bookRouter = require('./book_router')
+app.use(express.json())
 
-app.use("/api/books", bookRouter)
+const bookRouter = require('./routes/book.router')
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+app.use("/api/v1/books", bookRouter)
+
+app.listen(process.env.PORT, () => console.log("Server is running on port 5000"))
