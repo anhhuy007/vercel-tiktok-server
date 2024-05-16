@@ -22,6 +22,7 @@ const bookController = {
         }
     },
     create: async(req, res) => {
+        console.log("Create new book");                    
         try {
             const { title, price } = req.body
 
