@@ -32,7 +32,7 @@ const bookController = {
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
-            console.log("Something went wrong", error)
+            console.log("Something went wrong: ", error)
             res.json({msg: error.msg})
         }
     },
@@ -47,6 +47,7 @@ const bookController = {
             res.json({msg: "OK", data: rows[0]})
 
         } catch (error) {
+            console.log("Something went wrong: ", error)
             res.json({msg: error.msg})
         }
     },
@@ -64,6 +65,7 @@ const bookController = {
             
 
         } catch (error) {
+            console.log("Something went wrong: ", error)
             res.json({msg: error.msg})
         }
     }
