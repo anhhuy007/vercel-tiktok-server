@@ -58,4 +58,52 @@ class User {
     }
 }
 
-module.exports = { Short, User };
+class Comment {
+  constructor(id, short_id, content, created_at, commenter_id, like_count, reply_count) {
+    this.id = id || 0;
+    this.short_id = short_id || '';
+    this.content = content || '';
+    this.created_at = created_at || '';
+    this.commenter_id = commenter_id || '';
+    this.like_count = like_count || 0;
+    this.reply_count = reply_count || 0;
+  }
+
+  toString() {
+    return `Comment: ${this.id} ${this.short_id} ${this.content} ${this.created_at} ${this.commenter_id} ${this.like_count} ${this.reply_count}`;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      short_id: this.short_id,
+      content: this.content,
+      created_at: this.created_at,
+      commenter_id: this.commenter_id,
+      like_count: this.like_count,
+      reply_count: this.reply_count
+    };
+  }
+}
+
+class Like {
+  constructor(id, short_id, liker_id) {
+    this.id = id || 0;
+    this.short_id = short_id || '';
+    this.liker_id = liker_id || '';
+  }
+
+  toString() {
+    return `Like: ${this.id} ${this.short_id} ${this.liker_id}`;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      short_id: this.short_id,
+      liker_id: this.liker_id
+    };
+  }
+}
+
+module.exports = { Short, User, Comment, Like };

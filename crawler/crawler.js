@@ -5,7 +5,7 @@ const { Client } = require("youtubei");
 const youtube = new Client();
 const csv = require('csv-parser');
 const path = require('path');
-const { Short, User } = require('./models/model');
+const { Short, User, Comment, Like } = require('./models/model');
 const { channel } = require('diagnostics_channel');
 
 const video_cloud_storage = 'https://tiktok-clone-storage.000webhostapp.com/video/';
@@ -166,6 +166,9 @@ const fetchUsers = async (channel_ids) => {
   return users;
 }
 
+const fetchCommentInfo = async (short_id) => {
+}
+
 const shortCrawler = async () => {
   const video_ids = await readVideoIds();
   console.log('Data :\n', video_ids);
@@ -183,9 +186,65 @@ const userCrawler = async () => {
   console.log('Users written to file');
 }
 
+const fetchComments = async (short_id, user_ids, nbo_comments = 5) => {
+  const comments = []; 
+  
+  try{
+    const video = await youtube.getVideo(short_id);
+    let data = await video.comments.next(); // first 20 comments
+
+    // get first nbo_comments comments
+    for (let i = 0; i < nbo_comments; i++) {
+      const comment = data[i];
+      const newComment = new Comment();
+
+      console.log('Comment: ', comment);
+
+      newComment.short_id = short_id;
+      newComment.content = comment.content;
+      newComment.created_at = comment.publishDate;
+      // get random user id
+      newComment.commenter_id = user_ids[Math.floor(Math.random() * user_ids.length)];
+      newComment.like_count = comment?.likeCount;
+      newComment.reply_count = comment?.replyCount;
+
+      comments.push(newComment);
+    }
+  }
+  catch(err){
+    console.log(err);
+    console.log('Error fetching comments');
+    return [];
+  }
+
+  return comments;
+}
+
+const commentCrawler = async () => {
+  const short_ids = await readVideoIds();
+  const user_ids = await readChannelIds();
+  console.log('Data :\n', short_ids);
+
+  const comments = [];
+  
+  for(let i = 0; i < short_ids.length; i++) {
+    const result = await fetchComments(short_ids[i], user_ids);
+    if (result.length == 0) {
+      console.log('No comments for short id ' + short_ids[i]);
+      continue;
+    }
+    comments.push(...result);
+    console.log('Comments for short id ' + short_ids[i] + ':\n', result);
+  }
+
+  console.log('Comments :\n', comments);
+  await writeToJson(comments, 'comments.json');
+  console.log('Comments: ', comments);
+}
+
 const run = async () => {
   try {
-    await userCrawler();
+    await commentCrawler();
   }
   catch(err) {
     console.log(err);
