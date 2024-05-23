@@ -1,9 +1,9 @@
 const postgre = require('../database/database')
 
-const shortController = {
+const commentController = {
     getAll: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from short")
+            const { rows } = await postgre.query("select * from comment")
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})
@@ -11,7 +11,7 @@ const shortController = {
     },
     getById: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from short where id = $1", [req.params.id])
+            const { rows } = await postgre.query("select * from comment where id = $1", [req.params.id])
 
             if (rows[0]) {
                 return res.json({msg: "OK", data: rows})
@@ -24,10 +24,9 @@ const shortController = {
     },
     create: async(req, res) => {
         try {
-            const { youtube_id, title, video_url, thumbnail_url, views, channel_id } = req.body
-            const sql = 'INSERT INTO short(youtube_id, title, video_url, thumbnail_url, views, channel_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
-            const { row } = await postgre.query(sql, [youtube_id, title, video_url, thumbnail_url, views, channel_id])
-
+            const { short_id, content, create_at, commenter_id, like_count, reply_count } = request.body
+            const sql = 'INSERT INTO comment(short_id, content, create_at, commenter_id, like_count, reply_count) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
+            const { row } = await postgre.query(sql, [short_id, content, create_at, commenter_id, like_count, reply_count])
             res.json({msg: "OK", data: row[0]})
         }
         catch(error) {
@@ -37,10 +36,10 @@ const shortController = {
     },
     updateById: async(req, res) => {
         try {
-            const { youtube_id, title, video_url, thumbnail_url, views, channel_id } = req.body
-            const sql = 'UPDATE short set youtube_id = $1, title = $2, video_url = $3, thumbnail_url = $4, views = $5, channel_id = $6 where id = $7 RETURNING *'
-            const { rows } = await postgre.query(sql, [youtube_id, title, video_url, thumbnail_url, views, channel_id, req.params.id])
-
+            const { short_id, content, create_at, commenter_id, like_count, reply_count } = request.body
+            const sql = 'UPDATE comment set short_id = $1, content = $2, create_at = $3, commenter_id = $4, like_count = $5, reply_count = $6 where id = $7 RETURNING *'
+            const { rows } = await postgre.query(sql, [short_id, content, create_at, commenter_id, like_count, reply_count, req.params.id])
+            
             res.json({msg: "OK", data: rows[0]})
         }
         catch(error) {
@@ -50,7 +49,7 @@ const shortController = {
     },
     deleteById: async(req, res) => {
         try {
-            const sql = 'DELETE FROM short where id = $1 RETURNING *'
+            const sql = 'DELETE FROM comment where id = $1 RETURNING *'
             const { rows } = await postgre.query(sql, [req.params.id])
 
             if (rows[0]) {
@@ -66,4 +65,16 @@ const shortController = {
     }
 }
 
-module.exports = shortController
+/*
+    {
+    "id": 0,
+    "short_id": "f6wD7UV2WR0",
+    "content": "Bro got the subway surfers high jump sneakers ability irl 💀",
+    "created_at": "1 month ago",
+    "commenter_id": "UCM5gMM_HqfKHYIEJ3lstMUA",
+    "like_count": 115,
+    "reply_count": 2
+  }
+*/
+
+module.exports = commentController
