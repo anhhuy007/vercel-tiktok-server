@@ -48,10 +48,12 @@ const uploadShorts = async () => {
     `;
 
     try {
-        await Promise.all(shorts.map(async (short) => {
-            console.log(short);
-            await postgre.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id]);
-        }));
+        // await Promise.all(shorts.map(async (short) => {
+        //     console.log(short);
+        //     await postgre.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id]);
+        // }));
+        short = shorts[0];
+        await postgre.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id]);
         console.log("Shorts uploaded successfully");
     } catch (error) {
         console.log(error);
