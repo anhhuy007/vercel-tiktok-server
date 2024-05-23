@@ -72,4 +72,4 @@ const shortController = {
     }
 }
 
-module.exports = bookController
+module.exports = shortController
