@@ -52,7 +52,8 @@ const readVideoIds = () => {
     // open csv file to read video ids
     const video_ids = [];
 
-    fs.createReadStream('data/short_ids.csv')
+    const filePath = path.resolve(__dirname, 'data/short_ids.csv')
+    fs.createReadStream(filePath)
       .pipe(csv())
       .on('data', (row) => {
         console.log(row);
@@ -88,7 +89,7 @@ const fetchAndDownloadVideo = async(video_ids) => {
 const writeToJson = (obj, filename) => {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(obj, null, 2);
-    const path = 'data/' + filename;
+    const filePath = path.resolve(__dirname, 'data/' + filename);
     fs.writeFile(path, data, (error) => {
       if (error) {
         console.log('Error writing shorts to file');
@@ -104,7 +105,8 @@ const writeToJson = (obj, filename) => {
 const readChannelIds = () => {
   return new Promise((resolve, reject) => {
     // open json file to read channel ids
-    fs.readFile('data/shorts.json', (error, data) => {
+    const filePath = path.resolve(__dirname, 'data/shorts.json');
+    fs.readFile(filePath, (error, data) => {
       if (error) {
         console.log('Error reading channel ids');
 
@@ -164,9 +166,6 @@ const fetchUsers = async (channel_ids) => {
   }));
 
   return users;
-}
-
-const fetchCommentInfo = async (short_id) => {
 }
 
 const shortCrawler = async () => {
