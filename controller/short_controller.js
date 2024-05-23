@@ -3,7 +3,7 @@ const postgre = require('../database/database')
 const shortController = {
     getAll: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from shorts")
+            const { rows } = await postgre.query("select * from short")
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})
@@ -11,7 +11,7 @@ const shortController = {
     },
     getById: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from shorts where short_id = $1", [req.params.id])
+            const { rows } = await postgre.query("select * from short where short_id = $1", [req.params.id])
 
             if (rows[0]) {
                 return res.json({msg: "OK", data: rows})
@@ -60,6 +60,24 @@ const shortController = {
 
             if (rows[0]) {
                 return res.json({msg: "OK", data: rows[0]})
+            }
+
+            return res.status(404).json({msg: "not found"})
+            
+
+        } catch (error) {
+            console.log("Something went wrong: ", error)
+            res.json({msg: error.msg})
+        }
+    },
+    deleteAll: async(req, res) => {
+        try {
+            const sql = 'DELETE FROM books RETURNING *'
+
+            const { rows } = await postgre.query(sql)
+
+            if (rows[0]) {
+                return res.json({msg: "OK", data: rows})
             }
 
             return res.status(404).json({msg: "not found"})
