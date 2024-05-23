@@ -72,7 +72,7 @@ const shortController = {
     },
     deleteAll: async(req, res) => {
         try {
-            const sql = 'DELETE FROM books RETURNING *'
+            const sql = 'DELETE FROM short WHERE 1=1'
 
             const { rows } = await postgre.query(sql)
 
