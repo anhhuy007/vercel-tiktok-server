@@ -10,6 +10,5 @@ router.get("/:id", shortController.getById)
 router.post("/", shortController.create)
 router.put("/:id", shortController.updateById)
 router.delete("/:id", shortController.deleteById)
-router.delete("/", shortController.deleteAll)
 
 module.exports = router

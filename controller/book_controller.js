@@ -71,4 +71,16 @@ const bookController = {
     }
 }
 
+const createCommentTableSQL = `
+    CREATE TABLE IF NOT EXISTS comment(
+        id SERIAL PRIMARY KEY,
+        short_id VARCHAR(255),
+        content TEXT,
+        create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        commenter_id VARCHAR(255),
+        like_count INT, 
+        reply_count INT
+    ) 
+`;
+
 module.exports = bookController
