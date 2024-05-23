@@ -24,7 +24,7 @@ const commentController = {
     },
     create: async(req, res) => {
         try {
-            const { short_id, content, create_at, commenter_id, like_count, reply_count } = request.body
+            const { short_id, content, create_at, commenter_id, like_count, reply_count } = req.body
             const sql = 'INSERT INTO comment(short_id, content, create_at, commenter_id, like_count, reply_count) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
             const { row } = await postgre.query(sql, [short_id, content, create_at, commenter_id, like_count, reply_count])
             res.json({msg: "OK", data: row[0]})
@@ -36,7 +36,7 @@ const commentController = {
     },
     updateById: async(req, res) => {
         try {
-            const { short_id, content, create_at, commenter_id, like_count, reply_count } = request.body
+            const { short_id, content, create_at, commenter_id, like_count, reply_count } = req.body
             const sql = 'UPDATE comment set short_id = $1, content = $2, create_at = $3, commenter_id = $4, like_count = $5, reply_count = $6 where id = $7 RETURNING *'
             const { rows } = await postgre.query(sql, [short_id, content, create_at, commenter_id, like_count, reply_count, req.params.id])
             

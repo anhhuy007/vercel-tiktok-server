@@ -58,7 +58,7 @@ const uploadShorts = async () => {
     }
 }
 
-const fetchComments = async () => {
+const fetchComments = async (id) => {
     return new Promise((resolve, reject) => {
         const filePath = path.join(__dirname, '../crawler/data/comments.json');
         fs.readFile(filePath, 'utf8', (err, data) => {
@@ -67,14 +67,19 @@ const fetchComments = async () => {
                 reject(err);
             } else {
                 const result = JSON.parse(data);
+
+                // get first 20 comments, starting from index id
+                result = result.slice(id, id + 20);
+
                 resolve(result);
             }
         });
     });
 }
 
-const uploadComments = async () => {
-    const comments = await fetchComments();
+const uploadComments = async (req, res) => {
+    const id = req.params.id;
+    const comments = await fetchComments(id);
     const query = `
         INSERT INTO comment (short_id, content, created_at, commenter_id, like_count, reply_count)
         VALUES ($1, $2, $3, $4, $5)
