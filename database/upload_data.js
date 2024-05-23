@@ -58,4 +58,37 @@ const uploadShorts = async () => {
     }
 }
 
-module.exports = { createShortTable, uploadShorts }
+const fetchComments = async () => {
+    return new Promise((resolve, reject) => {
+        const filePath = path.join(__dirname, '../crawler/data/comments.json');
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.log('Error reading comments file');
+                reject(err);
+            } else {
+                const result = JSON.parse(data);
+                resolve(result);
+            }
+        });
+    });
+}
+
+const uploadComments = async () => {
+    const comments = await fetchComments();
+    const query = `
+        INSERT INTO comment (short_id, content, created_at, commenter_id, like_count, reply_count)
+        VALUES ($1, $2, $3, $4, $5)
+    `;
+
+    try {
+        await Promise.all(comments.map(async (comment) => {
+            console.log(comment);
+            await postgre.query(query, [comment.short_id, comment.content, comment.created_at, comment.commenter_id, comment.like_count, comment.reply_count]);
+        }));
+        console.log("Comments uploaded successfully");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { createShortTable, uploadShorts, uploadComments }
