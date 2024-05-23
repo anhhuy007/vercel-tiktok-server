@@ -1,8 +1,9 @@
-const postgre = require('./database')
-const bookController = {
+const postgre = require('../database/database')
+
+const shortController = {
     getAll: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from books")
+            const { rows } = await postgre.query("select * from shorts")
             res.json({msg: "OK", data: rows})
         } catch (error) {
             res.json({msg: error.msg})
@@ -10,7 +11,7 @@ const bookController = {
     },
     getById: async(req, res) => {
         try {
-            const { rows } = await postgre.query("select * from books where book_id = $1", [req.params.id])
+            const { rows } = await postgre.query("select * from shorts where short_id = $1", [req.params.id])
 
             if (rows[0]) {
                 return res.json({msg: "OK", data: rows})
