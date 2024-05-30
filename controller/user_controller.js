@@ -25,37 +25,35 @@ const userController = {
     },
 
     create: async(req, res) => {
+        const { youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url } = req.body;
         try {
-            const { username, email, password, role } = req.body;
-            const sql = 'INSERT INTO user_info(username, email, password, role) VALUES($1, $2, $3, $4) RETURNING *';
-            const { row } = postgres.query(sql, [username, email, password, role]);
-            res.json({msg: "OK", data: row[0]});
+            const { rows } = postgres.query("INSERT INTO user_info (youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url]);
+            res.status(201).json({msg: "CREATED", data: rows});
         }
         catch(err) {
-            console.log("Something went wrong: ", err);
             res.json({msg: err.msg});
         }
     },
 
-    updateById: async(req, res) => {
+    update: async(req, res) => {
+        const { youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url } = req.body;
         try {
-            const { username, email, password, role } = req.body;
-            const sql = 'UPDATE user_info SET username = $1, email = $2, password = $3, role = $4 WHERE id = $5 RETURNING *';
-            const { rows } = postgres.query(sql, [username, email, password, role, req.params.id]);
-            res.json({msg: "OK", data: rows[0]});
-        }
-        catch(err) {
-            console.log("SOMETHING WENT WRONG: ", err);
-            res.json({msg: err.msg});
-        }
-    },
-
-    deleteById: async(req, res) => {
-        try {
-            const sql = 'DELETE FROM user_info WHERE id = $1 RETURNING *';
-            const { rows } = postgres.query(sql, [req.params.id]);
+            const { rows } = postgres.query("UPDATE user_info SET youtube_id = $1, handle = $2, name = $3, subscribers = $4, description = $5, avatar_url = $6, thumbnail_url = $7, youtube_url = $8 WHERE id = $9 RETURNING *", [youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url, req.params.id]);
             if (rows[0]) {
-                return res.json({msg: "OK", data: rows[0]});
+                return res.json({msg: "OK", data: rows});
+            }
+            res.status(404).json({msg: "NOT FOUND"});
+        }
+        catch(err) {
+            res.json({msg: err.msg});
+        }
+    },
+
+    delete: async(req, res) => {
+        try {
+            const { rows } = postgres.query("DELETE FROM user_info WHERE id = $1 RETURNING *", [req.params.id]);
+            if (rows[0]) {
+                return res.json({msg: "OK", data: rows});
             }
             res.status(404).json({msg: "NOT FOUND"});
         }
