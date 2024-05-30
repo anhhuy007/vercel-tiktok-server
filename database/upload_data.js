@@ -74,7 +74,7 @@ const uploadComments = async (req, res) => {
     }
 }
 
-const fetchUsers = async (id) => {
+const fetchUsers = async () => {
     return new Promise((resolve, reject) => {
         const filePath = path.join(__dirname, '../crawler/data/users.json');
         fs.readFile(filePath, 'utf8', (err, data) => {
@@ -83,10 +83,6 @@ const fetchUsers = async (id) => {
                 reject(err);
             } else {
                 const result = JSON.parse(data);
-
-                // get first 20 users, starting from index id
-                result = result.slice(id, id + 20);
-
                 resolve(result);
             }
         });
@@ -94,21 +90,21 @@ const fetchUsers = async (id) => {
 }
 
 const uploadUsers = async (req, res) => {
-    const id = req.params.id;
-    const users = await fetchUsers(id);
+    const users = await fetchUsers();
 
     const query = `
-        INSERT INTO user (username, avatar_url, role)
-        VALUES ($1, $2, $3)
-    `;
+        INSERT INTO user_info (handle, name, subscriber, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `
 
     try {
         await Promise.all(users.map(async (user) => {
             console.log(user);
-            await postgres.query(query, [user.username, user.avatar_url, user.role])
-        }));
+            await postgres.query(query, [user.handle, user.name, user.subscriber, user.description, user.avatar_url, user.thumbnail_url, user.youtube_url])
+        }
+        ));
         console.log("Users uploaded successfully");
-    } catch (error) {
+    }
+    catch (error) {
         console.log(error);
     }
 }
