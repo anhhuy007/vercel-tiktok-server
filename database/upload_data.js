@@ -1,28 +1,6 @@
-const postgre = require('./database')
+const postgres = require('./database')
 const fs = require('fs')
 const path = require('path')
-
-// youtube short table
-const createShortTable = async () => {
-    const query = `
-        CREATE TABLE IF NOT EXISTS short (
-            id SERIAL PRIMARY KEY,
-            youtube_id VARCHAR(255),
-            title VARCHAR(255),
-            video_url VARCHAR(255),
-            thumbnail_url VARCHAR(255),
-            views INT,
-            channel_id VARCHAR(255),
-        )
-    `;
-
-    try {
-        // await postgre.query(query)
-        console.log("Short table created successfully")
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 // return list of shorts from json file
 const fetchShorts = async () => {
@@ -36,7 +14,7 @@ const fetchShorts = async () => {
                 const result = JSON.parse(data);
                 resolve(result);
             }
-        });
+        })
     });
 }
 
@@ -49,8 +27,8 @@ const uploadShorts = async () => {
 
     try {
         await Promise.all(shorts.map(async (short) => {
-            console.log(short);
-            await postgre.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id]);
+            console.log(short)
+            await postgres.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id])
         }));
         console.log("Shorts uploaded successfully");
     } catch (error) {
@@ -88,7 +66,7 @@ const uploadComments = async (req, res) => {
     try {
         await Promise.all(comments.map(async (comment) => {
             console.log(comment);
-            await postgre.query(query, [comment.short_id, comment.content, comment.created_at, comment.commenter_id, comment.like_count, comment.reply_count]);
+            await postgres.query(query, [comment.short_id, comment.content, comment.created_at, comment.commenter_id, comment.like_count, comment.reply_count])
         }));
         console.log("Comments uploaded successfully");
     } catch (error) {
@@ -96,4 +74,43 @@ const uploadComments = async (req, res) => {
     }
 }
 
-module.exports = { createShortTable, uploadShorts, uploadComments }
+const fetchUsers = async (id) => {
+    return new Promise((resolve, reject) => {
+        const filePath = path.join(__dirname, '../crawler/data/users.json');
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.log('Error reading users file');
+                reject(err);
+            } else {
+                const result = JSON.parse(data);
+
+                // get first 20 users, starting from index id
+                result = result.slice(id, id + 20);
+
+                resolve(result);
+            }
+        });
+    });
+}
+
+const uploadUsers = async (req, res) => {
+    const id = req.params.id;
+    const users = await fetchUsers(id);
+
+    const query = `
+        INSERT INTO user (username, avatar_url, role)
+        VALUES ($1, $2, $3)
+    `;
+
+    try {
+        await Promise.all(users.map(async (user) => {
+            console.log(user);
+            await postgres.query(query, [user.username, user.avatar_url, user.role])
+        }));
+        console.log("Users uploaded successfully");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { uploadShorts, uploadComments, uploadUsers }
