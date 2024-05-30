@@ -4,7 +4,7 @@ const { updateById } = require('./book_controller');
 const userController = {
     getAll: async(req, res) => {
         try {
-            const { rows } = postgres.query("SELECT * FROM user_info");
+            const { rows } = postgres.query("select * from user_info");
             console.log("rows: ", rows);
             res.json({msg: "OK", data: rows});
         }
