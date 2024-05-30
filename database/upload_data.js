@@ -60,7 +60,7 @@ const uploadComments = async (req, res) => {
     const comments = await fetchComments(id)
     const query = `
         INSERT INTO comment (short_id, content, created_at, commenter_id, like_count, reply_count)
-        VALUES ($1, $2, $3, $4, $5)
+        VALUES ($1, $2, $3, $4, $5, $6)
     `
 
     try {
