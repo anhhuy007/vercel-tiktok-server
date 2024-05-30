@@ -44,7 +44,7 @@ const fetchComments = async (id) => {
                 console.log('Error reading comments file')
                 reject(err)
             } else {
-                const result = JSON.parse(data)
+                var result = JSON.parse(data)
 
                 // get first 20 comments, starting from index id
                 result = result.slice(id, id + 20)
