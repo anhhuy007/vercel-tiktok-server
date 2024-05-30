@@ -74,7 +74,7 @@ const uploadComments = async (req, res) => {
     }
 }
 
-const fetchUsers = async () => {
+const fetchUsers = async (id) => {
     return new Promise((resolve, reject) => {
         const filePath = path.join(__dirname, '../crawler/data/users.json');
         fs.readFile(filePath, 'utf8', (err, data) => {
@@ -83,6 +83,10 @@ const fetchUsers = async () => {
                 reject(err);
             } else {
                 const result = JSON.parse(data);
+
+                // get first 20 users, starting from index id
+                result = result.slice(id, id + 20);
+
                 resolve(result);
             }
         });
@@ -90,7 +94,7 @@ const fetchUsers = async () => {
 }
 
 const uploadUsers = async (req, res) => {
-    const users = await fetchUsers();
+    const users = await fetchUsers(req.params.id);
 
     const query = `
         INSERT INTO user_info (handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7)
