@@ -97,13 +97,13 @@ const uploadUsers = async (req, res) => {
     const users = await fetchUsers(req.params.id)
 
     const query = `
-        INSERT INTO user_info (youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        INSERT INTO user_info (youtube_id, handle, name, follower, following, posts, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     `
 
     try {
         await Promise.all(users.map(async (user) => {
             console.log(user)
-            await postgres.query(query, [user.youtube_id, user.handle, user.name, user.subscribers, user.description, user.avatar_url, user.thumbnail_url, user.youtube_url])
+            await postgres.query(query, [user.youtube_id, user.handle, user.name, user.follower, user.following, user.posts, user.description, user.avatar_url, user.thumbnail_url, user.youtube_url])
         }
         ))
         console.log("Users uploaded successfully")

@@ -7,6 +7,7 @@ const csv = require('csv-parser');
 const path = require('path');
 const { Short, User, Comment, Like } = require('./models/model');
 const { channel } = require('diagnostics_channel');
+const { randomInt } = require('crypto');
 
 const video_cloud_storage = 'https://tiktok-clone-storage.000webhostapp.com/video/';
 const video_local_storage = path.join(__dirname, 'short_videos/');
@@ -90,7 +91,7 @@ const writeToJson = (obj, filename) => {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(obj, null, 2);
     const filePath = path.resolve(__dirname, 'data/' + filename);
-    fs.writeFile(path, data, (error) => {
+    fs.writeFile(filePath, data, (error) => {
       if (error) {
         console.log('Error writing shorts to file');
         reject(error);
@@ -138,11 +139,16 @@ const fetchUserInfo = async (channel_id) => {
 
       userInfo.youtube_id = user.id;
       userInfo.name = user.name;
-      userInfo.subscribers = user.subscriberCount;
       userInfo.description = user.shelves[0]?.subtitle?.replace(/<[^>]*>?/gm, '') || loremIpsum({count: 2, units: 'sentences'}); // remove html tags
       userInfo.avatar_url = user.thumbnails[0].url;
       userInfo.thumbnail_url = user.thumbnails[1].url;
       userInfo.youtube_url = user?.url;
+
+      // generate random number of followers, following, posts
+      const randomSeed = Math.random() * 900 + 100;
+      userInfo.follower = Math.round((Math.random() * 900000 + 1000) * randomSeed);
+      userInfo.following = Math.round((Math.random() * 900 + 100) * randomSeed);
+      userInfo.posts = Math.round((Math.random() * 990 + 10));
 
       // create handle from name
       // example: "John Doe" -> "@johndoe"
@@ -243,7 +249,7 @@ const commentCrawler = async () => {
 
 const run = async () => {
   try {
-    await commentCrawler();
+    await userCrawler();
   }
   catch(err) {
     console.log(err);

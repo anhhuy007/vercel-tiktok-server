@@ -27,12 +27,14 @@ class Short {
 }
 
 class User {
-    constructor(id, youtube_id, handle, name, subscribers, description, avatar_url, thumbnail_url, youtube_url) {
+    constructor(id, youtube_id, handle, name, follower, following, posts, description, avatar_url, thumbnail_url, youtube_url) {
       this.id = id || 0;
       this.youtube_id = youtube_id || '';
       this.handle = handle || '';
       this.name = name || '';
-      this.subscribers = subscribers || 0;
+      this.follower = follower || 0;
+      this.following = following || 0;
+      this.posts = posts || 0;
       this.description = description || '';
       this.avatar_url = avatar_url || '';
       this.thumbnail_url = thumbnail_url || '';
@@ -40,7 +42,7 @@ class User {
     }
 
     toString() {
-      return `User: ${this.id} ${this.youtube_id} ${this.handle} ${this.name} ${this.subscribers} ${this.description} ${this.avatar_url} ${this.thumbnail_url} ${this.youtube_url}`;
+      return `User: ${this.id} ${this.youtube_id} ${this.handle} ${this.name} ${this.follower} ${this.following} ${this.posts} ${this.description} ${this.avatar_url} ${this.thumbnail_url} ${this.youtube_url}`;
     }
 
     toJSON() {
@@ -49,7 +51,9 @@ class User {
         youtube_id: this.youtube_id,
         handle: this.handle,
         name: this.name,
-        subscribers: this.subscribers,
+        follower: this.follower,
+        following: this.following,
+        posts: this.posts,
         description: this.description,
         avatar_url: this.avatar_url,
         thumbnail_url: this.thumbnail_url,

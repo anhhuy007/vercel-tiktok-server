@@ -36,33 +36,38 @@ class Short:
 class User:
     def __init__(self):
         self.handle = ""
-        self.subcribers = 0
+        self.follower = 0
+        self.following = 0,
+        self.num_of_post = 0
         self.description = ""
         self.avatar_url = ""
         self.thumbnail_url = ""
         self.youtube_url = ""
 
     def __str__(self):
-        return f"Handle: {self.handle}, Subscribers: {self.subcribers}, Description: {self.description}, Avatar URL: {self.avatar_url}, Thumbnail URL: {self.thumbnail_url}, Youtube URL: {self.youtube_url}"
+        return f"Handle: {self.handle}, Follower: {self.follower}, Following: {self.following}, Num of Post: {self.num_of_post}, Description: {self.description}, Avatar URL: {self.avatar_url}, Thumbnail URL: {self.thumbnail_url}, Youtube URL: {self.youtube_url}"
     
     def to_dict(self):
         return {
             "handle": self.handle,
-            "subcribers": self.subcribers,
+            "follower": self.follower,
+            "following": self.following,
+            "num_of_post": self.num_of_post,
             "description": self.description,
             "avatar_url": self.avatar_url,
             "thumbnail_url": self.thumbnail_url,
             "youtube_url": self.youtube_url
         }
-    
+        
     def from_dict(self, data):
         self.handle = data["handle"]
-        self.subcribers = data["subcribers"]
+        self.follower = data["follower"]
+        self.following = data["following"]
+        self.num_of_post = data["num_of_post"]
         self.description = data["description"]
         self.avatar_url = data["avatar_url"]
         self.thumbnail_url = data["thumbnail_url"]
         self.youtube_url = data["youtube_url"]
-
 
 class Account:
     def __init__(self):

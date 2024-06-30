@@ -5,14 +5,14 @@ require('dotenv').config()
 
 app.use(express.json())
 
-const bookRouter = require('./router/book_router')
-const shortRouter = require('./router/short_router')
-const commentRouter = require('./router/comment_router')
-const userRouter = require('./router/user_router')
+const ProfileRouter = require("./router/profile_router")
 
-app.use("/api/v1/books", bookRouter)
-app.use("/api/v1/shorts", shortRouter)
-app.use("/api/v1/comments", commentRouter)
-app.use("/api/v1/users", userRouter)
+// app.use("/api/v1/short", shortRouter)
+// app.use("/api/v1/comment", commentRouter)
+// app.use("/api/v1/user", userRouter)
+
+// app.use("/api/v1/auth", AuthRouter) // for login and signup
+// app.use("/api/v1/feed", FeedRouter) // fetching short videos for the feed page
+app.use("/api/v1/profile", ProfileRouter) // fetching user profile details
 
 app.listen(process.env.PORT, () => console.log("Server is running on port 5000"))
