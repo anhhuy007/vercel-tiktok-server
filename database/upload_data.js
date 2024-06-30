@@ -97,7 +97,7 @@ const uploadUsers = async (req, res) => {
     const users = await fetchUsers(req.params.id)
 
     const query = `
-        INSERT INTO user_info (youtube_id, handle, name, follower, following, posts, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        INSERT INTO user_info (youtube_id, handle, name, follower, following, posts, description, avatar_url, thumbnail_url, youtube_url) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     `
 
     try {
