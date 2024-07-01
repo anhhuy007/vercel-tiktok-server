@@ -2,6 +2,7 @@ const { timeStamp } = require('console')
 const postgres = require('./database')
 const fs = require('fs')
 const path = require('path')
+const { Video } = require('../crawler/models/model')
 
 // return list of videos from json file
 const fetchvideos = async (id) => {
@@ -30,10 +31,9 @@ const uploadVideos = async (req, res) => {
     const id = req.params.id
     const videos = await fetchvideos(id)
     console.log(videos.length)
-    const query = `
-        INSERT INTO video (youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-    `
+    const query = ` INSERT INTO video 
+    (youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 
     try {
         await Promise.all(videos.map(async (video) => {
@@ -50,8 +50,7 @@ const uploadVideos = async (req, res) => {
             video.song = songs[Math.floor(Math.random() * songs.length)]
 
             console.log(video)
-            await postgres.query(query, [video.youtube_id, video.title, video.likes, video.comments, video.views, video.song, video.created_at, video.video_url, video.thumbnail_url, video.channel_id])
-        }))
+            await postgres.query(query, [video.youtube_id, video.title, video.likes, video.comments, video.views, video.song, video.created_at, video.video_url, video.thumbnail_url, video.channel_id])}))
         console.log("videos uploaded successfully")
     } catch (error) {
         console.log(error)
