@@ -6,6 +6,7 @@ require('dotenv').config()
 app.use(express.json())
 
 const ProfileRouter = require("./router/profile_router")
+const FeedRouter = require("./router/feed_router")
 
 // app.use("/api/v1/short", shortRouter)
 // app.use("/api/v1/comment", commentRouter)
