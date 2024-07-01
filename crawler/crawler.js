@@ -5,7 +5,7 @@ const { Client } = require("youtubei");
 const youtube = new Client();
 const csv = require('csv-parser');
 const path = require('path');
-const { Short, User, Comment, Like } = require('./models/model');
+const { Video, User, Comment, Like } = require('./models/model');
 const { channel } = require('diagnostics_channel');
 const { randomInt } = require('crypto');
 
@@ -28,11 +28,11 @@ async function fetchVideoInfo(video_id) {
   console.log('Fetching video info for ' + video_id)
   try {
     const video = await youtube.getVideo(video_id);
-    const short = new Short();
+    const short = new Video();
 
     short.title = video.title;
     short.video_url = video_cloud_storage + video.id + '.mp4';
-    short.thumbnail_url = video.thumbnails[0].url;
+    short.thumbnail_url = video.thumbnails.best;
     short.views = video.viewCount;
     short.youtube_video_id = video.id;
     short.channel_id = video.channel.id;
@@ -249,7 +249,7 @@ const commentCrawler = async () => {
 
 const run = async () => {
   try {
-    await userCrawler();
+    await shortCrawler();
   }
   catch(err) {
     console.log(err);
