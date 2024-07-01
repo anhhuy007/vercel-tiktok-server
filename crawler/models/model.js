@@ -1,29 +1,37 @@
-class Short {
-    constructor(id, title, video_url, thumbnail_url, views, youtube_video_id, channel_id) {
+class Video {
+    constructor(id, youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id) {
       this.id = id || 0;
+      this.youtube_id = youtube_id || '';
       this.title = title || '';
+      this.likes = likes || 0;
+      this.comments = comments || 0;
+      this.views = views || 0;
+      this.song = song || '';
+      this.created_at = created_at || '';
       this.video_url = video_url || '';
       this.thumbnail_url = thumbnail_url || '';
-      this.views = views || 0;
-      this.youtube_video_id = youtube_video_id || '';
-      this.channel_id = channel_id || '';
+      this.channel_id = channel_id || 0;
     }
-  
+
     toString() {
-      return `Short: ${this.id} ${this.title} ${this.video_url} ${this.thumbnail_url} ${this.views} ${this.youtube_video_id} ${this.channel_id}`;
+      return `Video: ${this.id} ${this.youtube_id} ${this.title} ${this.likes} ${this.comments} ${this.views} ${this.song} ${this.created_at} ${this.video_url} ${this.thumbnail_url} ${this.channel_id}`;
     }
-  
+
     toJSON() {
       return {
         id: this.id,
+        youtube_id: this.youtube_id,
         title: this.title,
+        likes: this.likes,
+        comments: this.comments,
+        views: this.views,
+        song: this.song,
+        created_at: this.created_at,
         video_url: this.video_url,
         thumbnail_url: this.thumbnail_url,
-        views: this.views,
-        youtube_video_id: this.youtube_video_id,
         channel_id: this.channel_id
       };
-    }    
+    }
 }
 
 class User {

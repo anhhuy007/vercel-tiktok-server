@@ -2,35 +2,49 @@ const postgres = require('./database')
 const fs = require('fs')
 const path = require('path')
 
-// return list of shorts from json file
-const fetchShorts = async () => {
+// return list of videos from json file
+const fetchvideos = async (id) => {
     return new Promise((resolve, reject) => {
         const filePath = path.join(__dirname, '../crawler/data/shorts.json')
         fs.readFile(filePath, 'utf8', (err, data) => {
             if (err) {
-                console.log('Error reading shorts file')
+                console.log('Error reading videos file')
                 reject(err)
             } else {
                 const result = JSON.parse(data)
+                result = result.slice(id, id + 20)
                 resolve(result)
             }
         })
     })
 }
 
-const uploadShorts = async () => {
-    const shorts = await fetchShorts()
+// sample song name and sound effect in video
+const songs = ['Dance Monkey', 'Shape of You', 'Blinding Lights', 'Uptown Funk', 'Despacito', 'Baby Shark', 'Lean On', 'See You Again', 'Counting Stars', 'Shake It Off', 'Thinking Out Loud', 'Cheap Thrills', 'Love Yourself', 'Let Her Go', 'Stressed Out', 'One Dance'];
+
+const uploadVideos = async (id) => {
+    const videos = await fetchvideos(id)
     const query = `
-        INSERT INTO short (youtube_id, title, video_url, thumbnail_url, views, channel_id)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO video (youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     `
 
     try {
-        await Promise.all(shorts.map(async (short) => {
-            console.log(short)
-            await postgres.query(query, [short.youtube_id, short.title, short.video_url, short.thumbnail_url, short.views, short.channel_id])
+        await Promise.all(videos.map(async (video) => {
+            // add additional fields to video object
+
+            // random date between 2020-01-01 and now
+            video.created_at = new Date(2020, 0, 1 + Math.floor(Math.random() * (new Date() - new Date(2020, 0, 1))))
+            video.likes = Math.floor(Math.random() * 1000)
+            video.comments = Math.floor(Math.random() * 100)
+
+            // random song name
+            video.song = songs[Math.floor(Math.random() * songs.length)]
+
+            console.log(video)
+            await postgres.query(query, [video.youtube_id, video.title, video.likes, video.comments, video.views, video.song, video.created_at, video.video_url, video.thumbnail_url, video.channel_id])
         }))
-        console.log("Shorts uploaded successfully")
+        console.log("videos uploaded successfully")
     } catch (error) {
         console.log(error)
     }
@@ -59,14 +73,14 @@ const uploadComments = async (req, res) => {
     const id = req.params.id
     const comments = await fetchComments(id)
     const query = `
-        INSERT INTO comment (short_id, content, created_at, commenter_id, like_count, reply_count)
+        INSERT INTO comment (video_id, content, created_at, commenter_id, like_count, reply_count)
         VALUES ($1, $2, $3, $4, $5, $6)
     `
 
     try {
         await Promise.all(comments.map(async (comment) => {
             console.log(comment)
-            await postgres.query(query, [comment.short_id, comment.content, comment.created_at, comment.commenter_id, comment.like_count, comment.reply_count])
+            await postgres.query(query, [comment.video_id, comment.content, comment.created_at, comment.commenter_id, comment.like_count, comment.reply_count])
         }))
         console.log("Comments uploaded successfully")
     } catch (error) {
@@ -113,4 +127,4 @@ const uploadUsers = async (req, res) => {
     }
 }
 
-module.exports = { uploadShorts, uploadComments, uploadUsers }
+module.exports = { uploadVideos, uploadComments, uploadUsers }
