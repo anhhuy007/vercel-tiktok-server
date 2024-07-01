@@ -25,7 +25,7 @@ const fetchvideos = async (id) => {
 const songs = ['Dance Monkey', 'Shape of You', 'Blinding Lights', 'Uptown Funk', 'Despacito', 'Baby Shark', 'Lean On', 'See You Again', 'Counting Stars', 'Shake It Off', 'Thinking Out Loud', 'Cheap Thrills', 'Love Yourself', 'Let Her Go', 'Stressed Out', 'One Dance'];
 
 const uploadVideos = async (id) => {
-    var videos = await fetchvideos(id)
+    const videos = await fetchvideos(id)
     console.log(videos.length)
     const query = `
         INSERT INTO video (youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id)
@@ -34,6 +34,7 @@ const uploadVideos = async (id) => {
 
     try {
         await Promise.all(videos.map(async (video) => {
+            // copy video object and add more fields
             // random date between 2020-01-01 and now
             video.created_at = new Date(2020, 0, 1 + Math.floor(Math.random() * (new Date() - new Date(2020, 0, 1))))
             video.likes = Math.floor(Math.random() * 1000)
