@@ -1,3 +1,4 @@
+const { timeStamp } = require('console')
 const postgres = require('./database')
 const fs = require('fs')
 const path = require('path')
@@ -38,7 +39,11 @@ const uploadVideos = async (req, res) => {
         await Promise.all(videos.map(async (video) => {
             // copy video object and add more fields
             // random date between 2020-01-01 and now
-            video.created_at = new Date(2020, 0, 1 + Math.floor(Math.random() * (new Date() - new Date(2020, 0, 1))))
+            startDate = new Date(2020, 0, 1)
+            endDate = new Date()
+            randomDate = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()))
+            randomTimeStamp = randomDate.toISOString().slice(0, 19).replace('T', ' ')
+            video.created_at = randomTimeStamp
             video.likes = Math.floor(Math.random() * 1000)
             video.comments = Math.floor(Math.random() * 100)
             // random song name
