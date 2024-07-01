@@ -10,7 +10,7 @@ class Video {
       this.created_at = created_at || '';
       this.video_url = video_url || '';
       this.thumbnail_url = thumbnail_url || '';
-      this.channel_id = channel_id || 0;
+      this.channel_id = channel_id || '';
     }
 
     toString() {
