@@ -11,6 +11,8 @@ const fetchvideos = async (id) => {
                 console.log('Error reading videos file')
                 reject(err)
             } else {
+                console.log('Reading videos file successful')
+                console.log('Number of videos: ' + JSON.parse(data).length)
                 var result = JSON.parse(data)
                 result = result.slice(id, id + 20)
                 resolve(result)
