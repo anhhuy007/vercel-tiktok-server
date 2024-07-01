@@ -25,7 +25,8 @@ const fetchvideos = async (id) => {
 // sample song name and sound effect in video
 const songs = ['Dance Monkey', 'Shape of You', 'Blinding Lights', 'Uptown Funk', 'Despacito', 'Baby Shark', 'Lean On', 'See You Again', 'Counting Stars', 'Shake It Off', 'Thinking Out Loud', 'Cheap Thrills', 'Love Yourself', 'Let Her Go', 'Stressed Out', 'One Dance'];
 
-const uploadVideos = async (id) => {
+const uploadVideos = async (req, res) => {
+    const id = req.params.id
     const videos = await fetchvideos(id)
     console.log(videos.length)
     const query = `
