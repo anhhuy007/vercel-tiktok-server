@@ -15,6 +15,7 @@ const fetchvideos = async (id) => {
                 console.log('Number of videos: ' + JSON.parse(data).length)
                 var result = JSON.parse(data)
                 result = result.slice(id, id + 20)
+                console.log('Number of videos to upload: ' + result.length)
                 resolve(result)
             }
         })
