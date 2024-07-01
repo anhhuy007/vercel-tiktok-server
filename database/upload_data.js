@@ -23,7 +23,7 @@ const fetchvideos = async (id) => {
 const songs = ['Dance Monkey', 'Shape of You', 'Blinding Lights', 'Uptown Funk', 'Despacito', 'Baby Shark', 'Lean On', 'See You Again', 'Counting Stars', 'Shake It Off', 'Thinking Out Loud', 'Cheap Thrills', 'Love Yourself', 'Let Her Go', 'Stressed Out', 'One Dance'];
 
 const uploadVideos = async (id) => {
-    const videos = await fetchvideos(id)
+    var videos = await fetchvideos(id)
     const query = `
         INSERT INTO video (youtube_id, title, likes, comments, views, song, created_at, video_url, thumbnail_url, channel_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
