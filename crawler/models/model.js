@@ -118,4 +118,4 @@ class Like {
   }
 }
 
-module.exports = { Short, User, Comment, Like };
+module.exports = { Video, User, Comment, Like };
