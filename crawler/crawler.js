@@ -135,13 +135,13 @@ const fetchUserInfo = async (channel_id) => {
       const user = await youtube.getChannel(channel_id);
       const userInfo = new User();
 
-      // console.log('User info: ', user);
+      console.log('User info: ', user);
 
       userInfo.youtube_id = user.id;
       userInfo.name = user.name;
       userInfo.description = user.shelves[0]?.subtitle?.replace(/<[^>]*>?/gm, '') || loremIpsum({count: 2, units: 'sentences'}); // remove html tags
-      userInfo.avatar_url = user.thumbnails[0].url;
-      userInfo.thumbnail_url = user.thumbnails[1].url;
+      userInfo.avatar_url = user.thumbnails?.best;
+      userInfo.thumbnail_url = "https://drive.google.com/file/d/1_VuG30LkK3lxNxRZhwFqIid1c7zBAKZh/view?usp=sharing";
       userInfo.youtube_url = user?.url;
 
       // generate random number of followers, following, posts
@@ -158,8 +158,7 @@ const fetchUserInfo = async (channel_id) => {
     }
     catch(err) {
       console.log(err);
-      console.log('Error fetching user info');
-
+      console.log('Error fetching user info:', channel_id);
       reject(err);
     }
   });
@@ -249,7 +248,7 @@ const commentCrawler = async () => {
 
 const run = async () => {
   try {
-    await shortCrawler();
+    await userCrawler();
   }
   catch(err) {
     console.log(err);
