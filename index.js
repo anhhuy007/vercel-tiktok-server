@@ -6,11 +6,13 @@ require('dotenv').config()
 app.use(express.json())
 
 const ProfileRouter = require("./router/profile_router")
-const FeedRouter = require("./router/feed_router")
+// const FeedRouter = require("./router/feed_router")
+// const AuthRouter = require("./router/auth_router")
 
 // app.use("/api/v1/short", shortRouter)
 // app.use("/api/v1/comment", commentRouter)
-// app.use("/api/v1/user", userRouter)
+const userRouter = require("./router/user_router")
+app.use("/api/v1/user", userRouter)
 
 // app.use("/api/v1/auth", AuthRouter) // for login and signup
 // app.use("/api/v1/feed", FeedRouter) // fetching short videos for the feed page
