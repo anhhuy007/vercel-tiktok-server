@@ -1,1 +1,30 @@
-GET http://localhost:5000/api/v1/auth/
+# GET http://localhost:5000/api/v1/auth/
+
+POST http://localhost:5000/api/v1/auth/login/
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "admin123"
+}
+
+# GET http://localhost:5000/api/v1/auth/hash
+
+# GET http://localhost:5000/api/v1/auth/accounts
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhbGljZTEyMyIsImlhdCI6MTcyMDUxMzk2NiwiZXhwIjoxNzIwNTE0MDI2fQ.CVhgcEfaYZJIpcjEdmaTEl3-_ur0goUSU7ObZiG0wDg
+
+# POST http://localhost:5000/api/v1/auth/token 
+# Content-Type: application/json
+
+# {
+#     "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhbGljZTEyMyIsImlhdCI6MTcyMDUxMzg4NH0.4QrmnU3XPgHaasZ_HZG8JhvXTjXcgo38IM5Y5QbQHKI"
+# }
+
+# POST http://localhost:5000/api/v1/auth/signup/
+# Content-Type: application/json
+
+# {
+#     "email": "admin@gmail.com",
+#     "username": "admin",
+#     "password": "admin123"
+# }
