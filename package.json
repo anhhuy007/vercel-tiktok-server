@@ -22,6 +22,7 @@
     "pg": "^8.11.5",
     "swagger-ui-express": "^5.0.1",
     "vercel": "^32.3.0",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "jsonwebtoken": "^8.5.1"
   }
 }
