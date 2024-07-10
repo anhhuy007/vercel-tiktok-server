@@ -69,7 +69,7 @@ const authController = {
             }
 
         } catch (error) {
-            console.log("Error: ", err)
+            console.log("Error: ", error)
             res.status(401).json({msg: error.msg})
         }
     },
