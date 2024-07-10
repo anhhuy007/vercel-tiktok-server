@@ -1,4 +1,4 @@
-const postgres = require('../database/database_wrapper')
+const postgres = require('../database/database')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { authenticateToken, generateAccessToken, generateRefreshToken } = require('../auth_token')

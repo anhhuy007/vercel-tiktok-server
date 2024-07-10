@@ -1,25 +1,42 @@
 const { Pool } = require('pg');
 const dbConfig = require('./config');
-
-localPool = new Pool(dbConfig.local);
-remotePool = new Pool(dbConfig.remote);
-
-localPool.connect((err) => {
-  if (err) {
-    console.log("Error connecting to the local database!", err)
+class DatabaseWrapper {
+  constructor() {
+      this.useRemote = process.env.USE_REMOTE_DB == 'true'
+      this.pool = this.useRemote ? createRemotePool() : createLocalPool()
   }
-  else {
-    console.log("Connected to the local database!")
-  }
-})
 
-remotePool.connect((err) => {
-  if (err) {
-    console.log("Error connecting to the remote database!", err)
+  async query(query, params) {
+      return await this.pool.query(query, params)
   }
-  else {
-    console.log("Connected to the remote database!")
-  }
-})
+}
 
-module.exports = { localPool, remotePool };
+function createRemotePool() {
+  remotePool = new Pool(dbConfig.remote);
+  remotePool.connect((err) => {
+      if (err) {
+        console.log("Error connecting to the remote database!", err)
+      }
+      else {
+        console.log("Connected to the remote database!")
+      }
+    })
+
+  return remotePool
+}
+
+function createLocalPool() {
+  localPool = new Pool(dbConfig.local);
+  localPool.connect((err) => {
+      if (err) {
+        console.log("Error connecting to the local database!", err)
+      }
+      else {
+        console.log("Connected to the local database!")
+      }
+    })
+
+  return localPool
+}
+
+module.exports = new DatabaseWrapper()
