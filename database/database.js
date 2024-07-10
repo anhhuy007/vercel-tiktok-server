@@ -3,7 +3,7 @@ const dbConfig = require('./config');
 class DatabaseWrapper {
   constructor() {
       this.useRemote = process.env.USE_REMOTE_DB == 'true'
-      this.pool = this.useRemote ? createRemotePool() : createLocalPool()
+      this.pool = createRemotePool()
   }
 
   async query(query, params) {
