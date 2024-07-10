@@ -1,11 +1,12 @@
 const postgres = require('../database/database_wrapper')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const { authenticateToken, generateAccessToken, generateRefreshToken } = require('../auth_token')
 const saltRounds = 10
 
 let refreshTokens = []
 
-const localAuthController = {
+const authController = {
     getAccounts: async(req, res) => {
         await authenticateToken(req, res, async() => {
             try {
@@ -30,7 +31,7 @@ const localAuthController = {
             const hashedPassword = await bcrypt.hash(password, saltRounds)
             const query = "INSERT INTO account (email, password, username) VALUES ($1, $2, $3) RETURNING *"
             const { rows } = await postgres.query(query, [email, hashedPassword, username])
-            res.json({msg: "Signup successful", data: rows})
+            res.json({msg: "Signup successful", data: {id: rows[0].id, email: rows[0].email, username: rows[0].username}})
         } catch (error) {
             console.log("Error: ", error)
             res.status(400).json({msg: error.msg})
@@ -48,14 +49,15 @@ const localAuthController = {
                 const user = rows[0];
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
-                    const token = jwt.sign({email: user.email, username: user.username}, process.env.SECRET_KEY, {expiresIn: '60s'})
-                    const refreshToken = jwt.sign({email: user.email, username: user.username}, process.env.REFRESH_SECRET_KEY)
+                    const token = generateAccessToken({email: user.email, username: user.username})
+                    const refreshToken = generateRefreshToken({email: user.email, username: user.username})
                     refreshTokens.push(refreshToken)
                     res.json({msg: "Login successfull", data: 
                         {
                             token: token, 
                             refresh_token: refreshToken, 
                             user: {
+                                id: user.id,
                                 email: user.email, 
                                 username: user.username
                             }
@@ -80,28 +82,19 @@ const localAuthController = {
             jwt.verify(refreshToken, process.env.REFRESH_SECRET_KEY, (err, user) => {
                 console.log(err)
                 if (err) return res.sendStatus(403)
-                const accessToken = jwt.sign({email: user.email, username: user.username}, process.env.SECRET_KEY, {expiresIn: '60s'})
-                res.json({accessToken})
+                const accessToken = generateAccessToken({email: user.email, username: user.username})
+            res.json({accessToken})
             })
         }
         catch(err) {
             console.log("Error: ", err)
             res.sendStatus(401).json({msg: err.msg})
         }
+    },
+    logout: async(req, res) => {
+        refreshTokens = refreshTokens.filter(token => token !== req.body.refresh_token)
+        res.sendStatus(204)
     }
 }
 
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1] // Bearer token
-    if (token === null) return res.sendStatus(401)
-    
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        console.log(err)
-        if (err) return res.sendStatus(403)
-        req.user = user
-        next()
-    })
-}
-
-module.exports = localAuthController
+module.exports = authController

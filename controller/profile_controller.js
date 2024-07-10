@@ -1,14 +1,17 @@
-const { localPool, remotePool } = require('../database/database')
+const { _ , remotePool } = require('../database/database')
+const { authenticateToken } = require('../auth_token')
 
 const profileController = {
     getProfileInfoById: async(req, res) => {
-        try {
-            const query = "SELECT * FROM user_info WHERE id = $1"
-            const { rows } = await remotePool.query(query, [req.params.id])
-            res.json({msg: "OK", data: rows})
-        } catch (error) {
-            res.json({msg: error.msg})
-        }   
+        await authenticateToken(req, res, async() => {
+            try {
+                const query = "SELECT * FROM user_info WHERE id = $1"
+                const { rows } = await remotePool.query(query, [req.params.id])
+                res.json({msg: "OK", data: rows})
+            } catch (error) {   
+                res.json({msg: error.msg})
+            }   
+        })
     },
     getLatestVideosByUserId: async(req, res) => {
         try {

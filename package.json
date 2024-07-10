@@ -20,6 +20,8 @@
     "lorem-ipsum": "^2.0.8",
     "nodemon": "^3.1.4",
     "pg": "^8.11.5",
-    "vercel": "^32.3.0"
+    "swagger-ui-express": "^5.0.1",
+    "vercel": "^32.3.0",
+    "yamljs": "^0.3.0"
   }
 }

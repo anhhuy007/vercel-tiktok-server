@@ -1,0 +1,352 @@
+openapi: 3.0.0
+info:
+  title: TikTok Clone API
+  description: API for a TikTok-like application with authentication, profile management, and feed functionality
+  version: 1.0.0
+servers:
+  - url: http://localhost:{port}/api/v1
+    variables:
+      port:
+        default: '5000'
+        description: API server port for local host
+  - url: https://vercel-tiktok-server.vercel.app/api/v1
+    description: production (on Vercel)
+
+tags:
+  - name: Authentication
+    description: User authentication operations
+  - name: Profile
+    description: User profile operations
+
+paths:
+  /auth/signup:
+    post:
+      summary: Create a new user account
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - username
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                username:
+                  type: string
+      responses:
+        '200':
+          description: Signup successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      email:
+                        type: string
+                      username:
+                        type: string
+        '400':
+          description: Bad request
+        '409':
+          description: Account already exists
+
+  /auth/login:
+    post:
+      summary: Authenticate a user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                      refresh_token:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          email:
+                            type: string
+                          username:
+                            type: string
+        '401':
+          description: Invalid password
+        '404':
+          description: Account not found
+
+  /auth/token:
+    post:
+      summary: Refresh access token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: New access token generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /auth/logout:
+    delete:
+      summary: Log out a user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '204':
+          description: Logged out successfully
+
+  /profile/info/{id}:
+    get:
+      summary: Get profile information by user ID
+      tags:
+        - Profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: Successfully retrieved profile information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserInfo'
+        '401':
+          description: Unauthorized
+
+  /profile/latest/videos/{id}:
+    get:
+      summary: Get latest videos by user ID
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: Successfully retrieved latest videos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Video'
+
+  /profile/popular/videos/{id}:
+    get:
+      summary: Get popular videos by user ID
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: Successfully retrieved popular videos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Video'
+
+  /profile/oldest/videos/{id}:
+    get:
+      summary: Get oldest videos by user ID
+      tags:
+        - Profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: User ID
+      responses:
+        '200':
+          description: Successfully retrieved oldest videos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Video'
+
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        handle:
+          type: string
+        name:
+          type: string
+        follower:
+          type: integer
+        following:
+          type: integer
+        posts:
+          type: integer
+        description:
+          type: string
+        avatar_url:
+          type: string
+        thumbnail_url:
+          type: string
+
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        likes:
+          type: integer
+        comments:
+          type: integer
+        views:
+          type: integer
+        song:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        video_url:
+          type: string
+        thumbnail_url:
+          type: string
+        channel_id:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
