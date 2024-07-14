@@ -1,7 +1,7 @@
 const postgres = require('../database/database')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
-const { authenticateToken, generateAccessToken, generateRefreshToken } = require('../auth_token')
+const { authenticateToken, generateAccessToken, generateRefreshToken } = require('../token/auth_token')
 const saltRounds = 10
 require('dotenv').config()
 let refreshTokens = []

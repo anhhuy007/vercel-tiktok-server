@@ -1,5 +1,5 @@
 const postgres = require('../database/database')
-const { authenticateToken } = require('../auth_token')
+const { authenticateToken } = require('../token/auth_token')
 
 const profileController = {
     getProfileInfoById: async(req, res) => {
