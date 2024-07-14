@@ -3,15 +3,13 @@ const { authenticateToken } = require('../token/auth_token')
 
 const profileController = {
     getProfileInfoById: async(req, res) => {
-        await authenticateToken(req, res, async() => {
-            try {
-                const query = "SELECT * FROM user_info WHERE id = $1"
-                const { rows } = await postgres.query(query, [req.params.id])
-                res.json({msg: "OK", data: rows})
-            } catch (error) {   
-                res.json({msg: error.msg})
-            }   
-        })
+        try {
+            const query = "SELECT * FROM user_info WHERE id = $1"
+            const { rows } = await postgres.query(query, [req.params.id])
+            res.json({msg: "OK", data: rows})
+        } catch (error) {   
+            res.json({msg: error.msg})
+        }   
     },
     getLatestVideosByUserId: async(req, res) => {
         try {
