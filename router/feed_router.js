@@ -1,8 +1,9 @@
 const express = require("express")
 const router = express.Router()
 
-const dbUploader = require('../database/upload_data')
+const feedController = require('../controller/feed_controller')
 
-router.get("/upload/:id", dbUploader.uploadVideos)
+router.get('/video', feedController.getFeedVideo)
+router.get('/videos/:limit', feedController.getFeedVideos)
 
 module.exports = router
