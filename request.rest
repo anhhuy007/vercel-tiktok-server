@@ -32,10 +32,10 @@
 # GET http://localhost:5000/api/v1/profile/info/1
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtldmluQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJrZXZpbl90IiwiaWF0IjoxNzIwNTk0MzQyLCJleHAiOjE3MjA1OTUyNDJ9.pkxNKLPu96oEGASyuNh84L9uBdPOSOuZepfaiUzwkU4
 
-POST http://localhost:5000/api/v1/like/
+POST http://localhost:5000/api/v1/follow/
 Content-Type: application/json
 
 {
-    "video_id": 1,
-    "liker_id": 1
+    "follower_id": 1,
+    "following_id": 2
 }
