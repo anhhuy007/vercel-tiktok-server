@@ -21,7 +21,7 @@ const feedController = {
             const limit = req.params.limit
             const query = `SELECT video.*, user_info.handle, user_info.avatar_url FROM video
                             JOIN user_info ON video.channel_id = user_info.id
-                            ORDER BY video.created_at DESC LIMIT $1`
+                            ORDER BY RANDOM() DESC LIMIT $1`
             const result = await
             postgres.query(query, [limit])
             res.status(200).send(result.rows)
