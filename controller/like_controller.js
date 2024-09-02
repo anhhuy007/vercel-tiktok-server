@@ -24,6 +24,33 @@ const likeController = {
             console.log(err)
             res.status(400).json({msg: err.msg})
         }
+    },
+
+    getLikeStatus: async (req, res) => {
+        try {
+            const { video_id, liker_id } = req.body
+            if (!video_id || !liker_id) return res.status(400).json({msg: "Please fill in all the fields"})
+
+            const likeStatus = await postgres.query("SELECT * FROM likes WHERE video_id = $1 AND liker_id = $2", [video_id, liker_id])
+            if (likeStatus.rows.length > 0) {
+                res.json({
+                    msg: "OK", 
+                    data: {
+                        liked: true
+                    }
+                })
+            } else {
+                res.json({
+                    msg: "OK", 
+                    data: {
+                        liked: false
+                    }
+                })
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(400).json({msg: err.msg})
+        }
     }
 }
 
