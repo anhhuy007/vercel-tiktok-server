@@ -30,6 +30,17 @@ const feedController = {
             console.log(err)
             res.status(500).send("Internal Server Error")
         }
+    },
+    getAllVideos: async(req, res) => {
+        try {
+            const query = `SELECT * from video ORDER BY id ASC`;
+            const result = await postgres.query(query)
+            res.status(200).send(result.rows)
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error")
+        }
     }
 }
 
