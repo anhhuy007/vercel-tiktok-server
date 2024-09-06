@@ -62,6 +62,13 @@ CREATE TABLE comment (
     reply_count INTEGER DEFAULT 0
 );
 
+CREATE TABLE likes (
+    video_id INTEGER NOT NULL,
+    liker_id INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (video_id, liker_id)
+);
+
 -- ADD FOREIGN KEY CONSTRAINT
 ALTER TABLE user_info 
 ADD CONSTRAINT fk_user_info_account 
