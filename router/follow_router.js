@@ -5,5 +5,6 @@ const followController = require('../controller/follow_controller')
 
 router.post('/', followController.incrementFollow)
 router.get('/status', followController.getFollowStatus)
+router.post('/cancel', followController.decrementFollow)
 
 module.exports = router

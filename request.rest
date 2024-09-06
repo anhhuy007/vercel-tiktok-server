@@ -33,17 +33,11 @@
 # GET http://localhost:5000/api/v1/profile/info/5
 # Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtldmluQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJrZXZpbl90IiwiaWF0IjoxNzIwNTk0MzQyLCJleHAiOjE3MjA1OTUyNDJ9.pkxNKLPu96oEGASyuNh84L9uBdPOSOuZepfaiUzwkU4
 
-<<<<<<< HEAD
-# POST http://localhost:5000/api/v1/follow/
-# Content-Type: application/json
-=======
-GET  http://localhost:5000/api/v1/follow/status
+POST  http://localhost:5000/api/v1/follow/cancel
 Content-Type: application/json
->>>>>>> 2232347c03643702c3b2736282f0263d1eea64dd
 
-# {
-#     "follower_id": 3,
-#     "following_id": 2
-# }
+{
+    "follower_id": 3,
+    "following_id": 2
+}
 
-GET HTTP/1.1 http://localhost:5000/api/v1/comment/1
