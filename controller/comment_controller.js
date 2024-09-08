@@ -29,8 +29,6 @@ const commentController = {
         try {
             const { video_id, content, commenter_id } = req.body
 
-            console.log(video_id, content, commenter_id)
-
             // Validate required fields
             if (!video_id || !content || !commenter_id) {
                 return res.status(400).json({ msg: "Missing required fields" })
@@ -39,15 +37,29 @@ const commentController = {
             // add comment to comment table
             const commentDbQuery = "INSERT INTO comment (video_id, content, commenter_id) VALUES ($1, $2, $3) RETURNING *"
             const { rows } = await postgres.query(commentDbQuery, [video_id, content, commenter_id])
+
+            // get the new comment id
+            const comment_id = rows[0].id
             
             // increase comment count in video table
             const updateCommentCountQuery = "UPDATE video SET comments = comments + 1 WHERE id = $1"
             await postgres.query(updateCommentCountQuery, [video_id])
 
+            // get the new uploded comment
+            const newCommentQuery = 
+            `
+            SELECT CMT.*, U.handle, U.avatar_url
+            FROM comment CMT
+            JOIN user_info U ON CMT.commenter_id = U.id
+            WHERE CMT.id = $1
+            `
+            const { rows: newComment } = await postgres.query(newCommentQuery, [comment_id])
+
+            // return the new comment
             res.json(
                 {
-                    msg: "Comment is added successfully",
-                    data: rows[0]
+                    msg: "OK",
+                    data: newComment
                 }
             )
         }
