@@ -65,8 +65,16 @@ CREATE TABLE comment (
 CREATE TABLE likes (
     video_id INTEGER NOT NULL,
     liker_id INTEGER NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (video_id, liker_id)
+);
+
+CREATE TABLE search_history (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    search_query VARCHAR(255) NOT NULL,
+    searched_user_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ADD FOREIGN KEY CONSTRAINT
@@ -101,4 +109,21 @@ FOREIGN KEY (host_id) REFERENCES user_info (id);
 ALTER TABLE following
 ADD CONSTRAINT fk_following_user_info_2
 FOREIGN KEY (following_id) REFERENCES user_info (id);
+
+ALTER TABLE likes
+ADD CONSTRAINT fk_likes_video
+FOREIGN KEY (video_id) REFERENCES video (id);
+
+ALTER TABLE likes
+ADD CONSTRAINT fk_likes_user_info
+FOREIGN KEY (liker_id) REFERENCES user_info (id);
+
+ALTER TABLE search_history
+ADD CONSTRAINT fk_search_history_user_info
+FOREIGN KEY (user_id) REFERENCES user_info (id);
+
+ALTER TABLE search_history
+ADD CONSTRAINT fk_search_history_user_info_2
+FOREIGN KEY (searched_user_id) REFERENCES user_info (id);
+
 

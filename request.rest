@@ -43,11 +43,13 @@
 #     "following_id": 2
 # }
 
-POST http://localhost:5000/api/v1/comment/
-Content-Type: application/json
+# POST http://localhost:5000/api/v1/comment/
+# Content-Type: application/json
 
-{
-    "video_id": 4,
-    "content": "Test comment",
-    "commenter_id": 2
-}
+# {
+#     "video_id": 4,
+#     "content": "Test comment",
+#     "commenter_id": 2
+# }
+
+GET http://localhost:5000/api/v1/search/n

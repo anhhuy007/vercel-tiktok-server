@@ -32,7 +32,7 @@ async function fetchVideoInfo(video_id) {
 
     short.title = video.title;
     short.video_url = video_cloud_storage + video.id + '.mp4';
-    short.thumbnail_url = video.thumbnails.best;
+    short.thumbnail_url = video.thumbnails.min;
     short.views = video.viewCount;
     short.youtube_video_id = video.id;
     short.channel_id = video.channel.id;
@@ -178,7 +178,7 @@ const shortCrawler = async () => {
   console.log('Data :\n', video_ids);
   const shorts = await fetchAndDownloadVideo(video_ids);
   console.log('Shorts :\n', shorts);
-  await writeToJson(shorts, 'shorts.json');
+  await writeToJson(shorts, 'shorts_test.json');
 }
 
 const userCrawler = async () => {
@@ -248,7 +248,7 @@ const commentCrawler = async () => {
 
 const run = async () => {
   try {
-    await userCrawler();
+    await shortCrawler();
   }
   catch(err) {
     console.log(err);

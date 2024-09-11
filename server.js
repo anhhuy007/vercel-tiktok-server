@@ -12,6 +12,7 @@ const ProfileRouter = require("./router/profile_router")
 const LikeRouter = require('./router/like_router')
 const CommentRouter = require('./router/comment_router')
 const FollowRouter = require('./router/follow_router')
+const SearchRouter = require('./router/search_router')
 
 app.use(express.json())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
@@ -22,5 +23,6 @@ app.use("/api/v1/profile", ProfileRouter) // fetching user profile details
 app.use("/api/v1/like", LikeRouter) //updating likes data
 app.use("/api/v1/comment", CommentRouter) //updating comments data
 app.use("/api/v1/follow", FollowRouter) //updating follow data
+app.use("/api/v1/search", SearchRouter) //updating likes data
 
 app.listen(process.env.PORT, () => console.log(`Server is running on port ${process.env.PORT}`))
