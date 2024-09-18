@@ -41,6 +41,18 @@ const feedController = {
             console.log(err)
             res.status(500).send("Internal Server Error")
         }
+    },
+    postVideo: async(req, res) => {
+        try {
+            const { channelId, title, song, videoUrl, thumbnailUrl } = req.body
+            const query = `INSERT INTO video (channel_id, title, song, video_url, thumbnail_url) VALUES ($1, $2, $3, $4, $5) RETURNING *`
+            const result = await postgres.query(query, [channelId, title, song, videoUrl, thumbnailUrl])
+            res.status(200).send(result.rows[0])
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error")
+        }
     }
 }
 
