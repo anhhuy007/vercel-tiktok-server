@@ -54,6 +54,32 @@ const searchController = {
             console.log(err)
             res.status(500).send("Internal Server Error")
         }
+    },
+    getUserById: async(req, res) => {
+        try {
+            const userId = req.params.id
+            const query = `SELECT * FROM user_info WHERE id = $1`
+            const { rows } = await postgres.query(query, [userId])
+
+            res.json({msg: "OK", data: rows[0]})
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error")
+        }
+    },
+    deleteSearchHistory: async(req, res) => {
+        try {
+            const historyId = req.params.id
+            const query = `DELETE FROM search_history WHERE id = $1`
+            await postgres.query(query, [historyId])
+
+            res.json({msg: "OK"})
+        }
+        catch (err) {
+            console.log(err)
+            res.status(500).send("Internal Server Error")
+        }
     }
 }
 
