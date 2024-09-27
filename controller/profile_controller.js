@@ -35,6 +35,21 @@ const profileController = {
         catch(error) {
             res.json({msg: error.msg})
         }
+    },
+    updateProfileInfo: async(req, res) => {
+        try {
+            const { id, handle, name, description, avatar_url, thumbnail_url } = req.body
+            const query = `UPDATE user_info 
+            SET handle = $2, name = $3, description = $4, avatar_url = $5, thumbnail_url = $6 
+            WHERE id = $1
+            RETURNING *
+            `
+            const { rows } = await postgres.query(query, [id, handle, name, description, avatar_url, thumbnail_url])
+            res.json({msg: "OK", data: rows})
+
+        } catch (error) {
+            res.json({msg: error.msg})
+        }
     }
 }
 
